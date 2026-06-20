@@ -123,6 +123,8 @@
       <button class="tab-btn" data-tab="tab-projects">Projects</button>
       <button class="tab-btn" data-tab="tab-students">PhD Students</button>
       <button class="tab-btn" data-tab="tab-workshops">FDP / Workshops</button>
+      <button class="tab-btn" data-tab="tab-gallery">Gallery</button>
+      <button class="tab-btn" data-tab="tab-videos">Videos</button>
     </nav>
 
     <div class="tab-panel active" id="tab-publications">
@@ -153,6 +155,18 @@
         <p class="loading-text">Loading workshops…</p>
       </div>
     </div>
+
+    <div class="tab-panel" id="tab-gallery">
+      <div id="gallery-grid" class="gallery-grid">
+        <p class="loading-text">Loading gallery…</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-videos">
+      <div id="videos-grid" class="video-grid">
+        <p class="loading-text">Loading videos…</p>
+      </div>
+    </div>
   </main>
 
   <!-- RIGHT COLUMN -->
@@ -165,6 +179,15 @@
     </div>
   </aside>
 
+</div>
+
+<!-- Lightbox overlay for gallery photos -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+  <button class="lightbox-nav lightbox-prev" id="lightbox-prev" aria-label="Previous">&#8249;</button>
+  <img id="lightbox-img" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightbox-next" aria-label="Next">&#8250;</button>
+  <p id="lightbox-caption" class="lightbox-caption"></p>
 </div>
 
 <script src="script.js"></script>

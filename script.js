@@ -7,7 +7,11 @@ const SHEET_URLS = {
   projects:     'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVxhGWhR5Hy5fYU7ImzJDLxEDOrVt-YrW5LZ_LJ1el6tSHu1K9BSb-9KuVvMDvvT4jIYSfxdPfsqb3/pub?gid=1931317134&single=true&output=csv',
   students:     'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVxhGWhR5Hy5fYU7ImzJDLxEDOrVt-YrW5LZ_LJ1el6tSHu1K9BSb-9KuVvMDvvT4jIYSfxdPfsqb3/pub?gid=1899733357&single=true&output=csv',
   workshops:    'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVxhGWhR5Hy5fYU7ImzJDLxEDOrVt-YrW5LZ_LJ1el6tSHu1K9BSb-9KuVvMDvvT4jIYSfxdPfsqb3/pub?gid=805060318&single=true&output=csv',
-  news:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVxhGWhR5Hy5fYU7ImzJDLxEDOrVt-YrW5LZ_LJ1el6tSHu1K9BSb-9KuVvMDvvT4jIYSfxdPfsqb3/pub?gid=581138924&single=true&output=csv'
+  news:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVxhGWhR5Hy5fYU7ImzJDLxEDOrVt-YrW5LZ_LJ1el6tSHu1K9BSb-9KuVvMDvvT4jIYSfxdPfsqb3/pub?gid=581138924&single=true&output=csv',
+  // TODO: replace these two with your own "Publish to web" CSV links once
+  // you've added a "Gallery" tab and a "Videos" tab to your Google Sheet.
+  gallery:      'PASTE_YOUR_GALLERY_TAB_CSV_LINK_HERE',
+  videos:       'PASTE_YOUR_VIDEOS_TAB_CSV_LINK_HERE'
 };
 
 const MY_NAME_PATTERN = /Srivastava,?\s*A\.?|Ashish\s+Srivastava/i;
@@ -92,6 +96,18 @@ function formatDate(dateStr) {
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return dateStr;
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function extractYouTubeId(url) {
+  if (!url) return null;
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/|youtube\.com\/shorts\/)([\w-]{11})/
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
 }
 
 // ===================== RENDERERS =====================
@@ -231,6 +247,82 @@ function renderNews(rows) {
   }
 }
 
+// ===================== GALLERY + LIGHTBOX =====================
+let galleryRows = [];
+
+function renderGallery(rows) {
+  galleryRows = rows;
+  const html = rows.map((g, idx) => `
+    <div class="gallery-thumb" data-index="${idx}">
+      <img src="${escapeHtml(g.image_path)}" alt="${escapeHtml(g.caption || '')}" loading="lazy">
+      ${g.caption ? `<div class="gallery-thumb-caption">${escapeHtml(g.caption)}</div>` : ''}
+    </div>
+  `).join('');
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = html || '<p class="loading-text">No photos yet.</p>';
+  grid.querySelectorAll('.gallery-thumb').forEach(el => {
+    el.addEventListener('click', () => openLightbox(Number(el.dataset.index)));
+  });
+}
+
+let lightboxIndex = 0;
+
+function openLightbox(index) {
+  if (!galleryRows[index]) return;
+  lightboxIndex = index;
+  const g = galleryRows[index];
+  document.getElementById('lightbox-img').src = g.image_path;
+  document.getElementById('lightbox-img').alt = g.caption || '';
+  document.getElementById('lightbox-caption').textContent = g.caption || '';
+  document.getElementById('lightbox').classList.add('active');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+}
+
+function lightboxStep(delta) {
+  if (galleryRows.length === 0) return;
+  lightboxIndex = (lightboxIndex + delta + galleryRows.length) % galleryRows.length;
+  openLightbox(lightboxIndex);
+}
+
+function initLightbox() {
+  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox-prev').addEventListener('click', () => lightboxStep(-1));
+  document.getElementById('lightbox-next').addEventListener('click', () => lightboxStep(1));
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target.id === 'lightbox') closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    const lb = document.getElementById('lightbox');
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lightboxStep(-1);
+    if (e.key === 'ArrowRight') lightboxStep(1);
+  });
+}
+
+// ===================== VIDEOS =====================
+function renderVideos(rows) {
+  const html = rows.map(v => {
+    const vid = extractYouTubeId(v.youtube_url);
+    if (!vid) return '';
+    return `
+      <div class="video-card">
+        <div class="video-embed">
+          <iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="${escapeHtml(v.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="video-info">
+          <p class="video-title">${escapeHtml(v.title)}</p>
+          ${v.description ? `<p class="video-desc">${escapeHtml(v.description)}</p>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('videos-grid').innerHTML = html || '<p class="loading-text">No videos yet.</p>';
+}
+
 // ===================== LOAD ALL DATA =====================
 async function loadAll() {
   const tasks = [
@@ -248,6 +340,12 @@ async function loadAll() {
     }),
     fetchSheet(SHEET_URLS.news).then(renderNews).catch(() => {
       document.getElementById('news-list').innerHTML = '<p class="error-text" style="color:#e08080;">Could not load news.</p>';
+    }),
+    fetchSheet(SHEET_URLS.gallery).then(renderGallery).catch(() => {
+      document.getElementById('gallery-grid').innerHTML = '<p class="error-text">Could not load gallery — check the Gallery CSV link in script.js.</p>';
+    }),
+    fetchSheet(SHEET_URLS.videos).then(renderVideos).catch(() => {
+      document.getElementById('videos-grid').innerHTML = '<p class="error-text">Could not load videos — check the Videos CSV link in script.js.</p>';
     })
   ];
   await Promise.all(tasks);
@@ -271,5 +369,6 @@ function initTabs() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
+  initLightbox();
   loadAll();
 });
