@@ -10,8 +10,8 @@ const SHEET_URLS = {
   news:         'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVxhGWhR5Hy5fYU7ImzJDLxEDOrVt-YrW5LZ_LJ1el6tSHu1K9BSb-9KuVvMDvvT4jIYSfxdPfsqb3/pub?gid=581138924&single=true&output=csv',
   // TODO: replace these two with your own "Publish to web" CSV links once
   // you've added a "Gallery" tab and a "Videos" tab to your Google Sheet.
-  gallery:      'PASTE_YOUR_GALLERY_TAB_CSV_LINK_HERE',
-  videos:       'PASTE_YOUR_VIDEOS_TAB_CSV_LINK_HERE'
+  gallery:      'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVxhGWhR5Hy5fYU7ImzJDLxEDOrVt-YrW5LZ_LJ1el6tSHu1K9BSb-9KuVvMDvvT4jIYSfxdPfsqb3/pub?gid=1849619862&single=true&output=csv',
+  videos:       'https://docs.google.com/spreadsheets/d/e/2PACX-1vRVxhGWhR5Hy5fYU7ImzJDLxEDOrVt-YrW5LZ_LJ1el6tSHu1K9BSb-9KuVvMDvvT4jIYSfxdPfsqb3/pub?gid=97681556&single=true&output=csv'
 };
 
 const MY_NAME_PATTERN = /Srivastava,?\s*A\.?|Ashish\s+Srivastava/i;
