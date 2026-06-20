@@ -1,1 +1,162 @@
-<h1>Coming soon</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dr. Ashish Srivastava — Digital Resume</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- LEFT COLUMN -->
+  <aside class="left-col">
+
+    <div class="card profile-card">
+      <img src="assets/profile.jpg" alt="Dr. Ashish Srivastava" class="profile-photo">
+      <h1 class="name">Dr. Ashish Srivastava</h1>
+      <p class="title">Assistant Professor (Research), Department of Mechanical Engineering, Presidency University, Bangalore</p>
+    </div>
+
+    <div class="card">
+      <h2 class="card-heading">Contact</h2>
+      <p class="contact-line">✉ ashishsrivastava@presidencyuniversity.in</p>
+      <p class="contact-line">✉ srivastavashishj@gmail.com</p>
+      <p class="contact-line">☎ +91 9450990596</p>
+      <div class="social-row">
+        <a href="https://scholar.google.com/citations?user=Md9Z1PMAAAAJ" target="_blank" class="social-icon">G</a>
+        <a href="https://www.linkedin.com/in/dr-ashish-srivastava-769a70146/" target="_blank" class="social-icon">in</a>
+        <a href="https://www.scopus.com/authid/detail.uri?authorId=57211776060" target="_blank" class="social-icon">SC</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-heading">Research interest</h2>
+      <p class="body-text">High speed machining, Barkhausen noise signal processing, friction stir welding, application of AI/ML in manufacturing and material discovery</p>
+    </div>
+
+    <div class="card">
+      <h2 class="card-heading">Education</h2>
+
+      <div class="edu-item">
+        <p class="edu-title">PhD, Mechanical Engineering</p>
+        <p class="edu-meta">IIT-BHU, Varanasi &middot; 2013-2019</p>
+        <p class="edu-note">Research thesis: Study on grindability of surface modified steel</p>
+      </div>
+      <div class="edu-item">
+        <p class="edu-title">M.Tech, Production Engineering</p>
+        <p class="edu-meta">MNNIT, Allahabad &middot; 2010-2012</p>
+        <p class="edu-note">Research thesis: Parameter optimization of EDDG Process using ANN and GA</p>
+      </div>
+      <div class="edu-item">
+        <p class="edu-title">B.Tech, Mechanical Engineering</p>
+        <p class="edu-meta">UIET (CSJM University), Kanpur &middot; 2006-2010</p>
+      </div>
+      <div class="edu-item">
+        <p class="edu-title">PG Diploma, AI and ML</p>
+        <p class="edu-meta">Central University of Hyderabad &middot; 2021-2022</p>
+      </div>
+      <div class="edu-item">
+        <p class="edu-title">Diploma, Data Science</p>
+        <p class="edu-meta">IIT-Madras &middot; 2022-2023</p>
+      </div>
+      <div class="edu-item last">
+        <p class="edu-title">Diploma, Programming</p>
+        <p class="edu-meta">IIT-Madras &middot; 2023-2024</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-heading">Work experience</h2>
+      <div class="edu-item">
+        <p class="edu-title">Assistant Professor (Research)</p>
+        <p class="edu-meta">Presidency University, Bangalore &middot; 2022-Present</p>
+      </div>
+      <div class="edu-item">
+        <p class="edu-title">Assistant Professor</p>
+        <p class="edu-meta">Presidency University, Bangalore &middot; 2019-2022</p>
+      </div>
+      <div class="edu-item last">
+        <p class="edu-title">Assistant Professor</p>
+        <p class="edu-meta">United College of Engineering and Management, Prayagraj &middot; 2012-2013</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-heading">Skills</h2>
+      <p class="skill-group-label">Core skills</p>
+      <div class="tag-row">
+        <span class="tag">Application of AI in material discovery</span>
+        <span class="tag">X-Ray diffraction</span>
+        <span class="tag">Scanning electron microscopy</span>
+        <span class="tag">Non-destructive characterisation</span>
+      </div>
+      <p class="skill-group-label">Programming languages</p>
+      <div class="tag-row">
+        <span class="tag">Python</span>
+        <span class="tag">Java</span>
+        <span class="tag">SQL</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Bash</span>
+        <span class="tag">HTML/CSS</span>
+      </div>
+      <p class="skill-group-label">Technologies/Frameworks</p>
+      <div class="tag-row">
+        <span class="tag">Pandas</span>
+        <span class="tag">Scikit-learn</span>
+        <span class="tag">Flask</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- MIDDLE COLUMN -->
+  <main class="middle-col card">
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="tab-publications">Publications</button>
+      <button class="tab-btn" data-tab="tab-projects">Projects</button>
+      <button class="tab-btn" data-tab="tab-students">PhD Students</button>
+      <button class="tab-btn" data-tab="tab-workshops">FDP / Workshops</button>
+    </nav>
+
+    <div class="tab-panel active" id="tab-publications">
+      <div id="publications-journal" class="entry-list">
+        <p class="loading-text">Loading publications…</p>
+      </div>
+      <h3 class="sub-heading" id="conf-heading" style="display:none;">Conference Publications</h3>
+      <div id="publications-conference" class="entry-list"></div>
+    </div>
+
+    <div class="tab-panel" id="tab-projects">
+      <div id="projects-list" class="entry-list">
+        <p class="loading-text">Loading projects…</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-students">
+      <div id="students-list" class="entry-grid">
+        <p class="loading-text">Loading PhD students…</p>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-workshops">
+      <div id="workshops-list" class="entry-list">
+        <p class="loading-text">Loading workshops…</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- RIGHT COLUMN -->
+  <aside class="right-col">
+    <h2 class="news-heading">Recent News</h2>
+    <div id="news-list">
+      <p class="loading-text light">Loading news…</p>
+    </div>
+  </aside>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
