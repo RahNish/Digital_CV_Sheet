@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dr. Ashish Srivastava — Digital Resume</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -121,6 +124,9 @@
     </nav>
 
     <div class="tab-panel active" id="tab-publications">
+      <div class="year-filter" id="year-filter">
+        <p class="loading-text">Loading years…</p>
+      </div>
       <div id="publications-journal" class="entry-list">
         <p class="loading-text">Loading publications…</p>
       </div>
@@ -150,8 +156,10 @@
   <!-- RIGHT COLUMN -->
   <aside class="right-col">
     <h2 class="news-heading">Recent News</h2>
-    <div id="news-list">
-      <p class="loading-text light">Loading news…</p>
+    <div class="news-viewport" id="news-viewport">
+      <div id="news-list" class="news-track">
+        <p class="loading-text light">Loading news…</p>
+      </div>
     </div>
   </aside>
 

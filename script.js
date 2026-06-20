@@ -95,7 +95,10 @@ function formatDate(dateStr) {
 }
 
 // ===================== RENDERERS =====================
-function renderPublications(rows) {
+let allPublicationRows = [];
+let activeYear = 'All';
+
+function renderPublicationsList(rows) {
   const journal = rows.filter(r => (r.type || 'Journal').toLowerCase() !== 'conference');
   const conference = rows.filter(r => (r.type || '').toLowerCase() === 'conference');
 
@@ -117,12 +120,46 @@ function renderPublications(rows) {
     </div>
   `).join('');
 
-  document.getElementById('publications-journal').innerHTML = journalHtml || '<p class="loading-text">No publications yet.</p>';
+  document.getElementById('publications-journal').innerHTML = journalHtml || '<p class="loading-text">No publications for this year.</p>';
 
+  const confHeading = document.getElementById('conf-heading');
   if (conference.length > 0) {
-    document.getElementById('conf-heading').style.display = 'block';
+    confHeading.style.display = 'block';
     document.getElementById('publications-conference').innerHTML = conferenceHtml;
+  } else {
+    confHeading.style.display = 'none';
+    document.getElementById('publications-conference').innerHTML = '';
   }
+}
+
+function applyYearFilter(year) {
+  activeYear = year;
+  document.querySelectorAll('.year-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.year === year);
+  });
+  const filtered = year === 'All'
+    ? allPublicationRows
+    : allPublicationRows.filter(r => r.year === year);
+  renderPublicationsList(filtered);
+}
+
+function renderPublications(rows) {
+  allPublicationRows = rows;
+
+  const years = Array.from(new Set(rows.map(r => r.year).filter(Boolean)))
+    .sort((a, b) => Number(b) - Number(a));
+
+  const yearButtonsHtml = ['All', ...years].map(y => `
+    <button class="year-btn${y === activeYear ? ' active' : ''}" data-year="${escapeHtml(y)}">${escapeHtml(y)}</button>
+  `).join('');
+
+  const yearFilterEl = document.getElementById('year-filter');
+  yearFilterEl.innerHTML = yearButtonsHtml;
+  yearFilterEl.querySelectorAll('.year-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyYearFilter(btn.dataset.year));
+  });
+
+  applyYearFilter(activeYear);
 }
 
 function renderProjects(rows) {
@@ -164,13 +201,34 @@ function renderWorkshops(rows) {
 
 function renderNews(rows) {
   const sorted = rows.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
-  const html = sorted.map(n => `
+
+  if (sorted.length === 0) {
+    document.getElementById('news-list').innerHTML = '<p class="loading-text light">No news yet.</p>';
+    return;
+  }
+
+  const itemHtml = n => `
     <div class="news-item">
       <p>${escapeHtml(n.message)}${n.link_url ? ` <a href="${escapeHtml(n.link_url)}" target="_blank" style="color:#7fa8e0;">Read →</a>` : ''}</p>
       ${n.date ? `<span class="news-date">${formatDate(n.date)}</span>` : ''}
     </div>
-  `).join('');
-  document.getElementById('news-list').innerHTML = html || '<p class="loading-text light">No news yet.</p>';
+  `;
+
+  const track = document.getElementById('news-list');
+  const viewport = document.getElementById('news-viewport');
+
+  // Only animate (and duplicate the list) if there's enough content to
+  // make scrolling worthwhile; otherwise just show it statically.
+  if (sorted.length > 2) {
+    const singleHtml = sorted.map(itemHtml).join('');
+    track.innerHTML = singleHtml + singleHtml; // duplicate for seamless loop
+    const duration = Math.max(sorted.length * 6, 18); // ~6s per item, min 18s
+    track.style.setProperty('--news-duration', duration + 's');
+  } else {
+    track.innerHTML = sorted.map(itemHtml).join('');
+    track.style.animation = 'none';
+    viewport.style.maxHeight = 'none';
+  }
 }
 
 // ===================== LOAD ALL DATA =====================
